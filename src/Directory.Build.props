@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <RootNamespace>InsightArchitectures.[NAMESPACE]</RootNamespace>
+    <RootNamespace>InsightArchitectures.Extensions.AspNetCore</RootNamespace>
     <AssemblyName>$(RootNamespace).$(MSBuildProjectName)</AssemblyName>
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
@@ -14,7 +14,7 @@
     <PackageId>$(AssemblyName)</PackageId>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/insight-architectures/[REPOSITORY]</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/insight-architectures/aspnetcore-extensions</PackageProjectUrl>
     <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
