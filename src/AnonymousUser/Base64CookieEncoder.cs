@@ -4,11 +4,18 @@ using System.Threading.Tasks;
 
 namespace InsightArchitectures.AnonymousUser
 {
+    /// <summary>
+    /// Default cookie value encoder/decoder. Uses base64 for serialisation.
+    /// </summary>
     public class Base64CookieEncoder : ICookieEncoder
     {
+        /// <summary>
+        /// Deserialises a base64 value into clear text.
+        /// <param name="encodedValue">A base64 value. Returns null if argument is null</param>
+        /// </summary>
         public Task<string> DecodeAsync(string encodedValue)
         {
-            if(string.IsNullOrWhiteSpace(encodedValue))
+            if (string.IsNullOrWhiteSpace(encodedValue))
             {
                 return Task.FromResult((string)null);
             }
@@ -18,9 +25,13 @@ namespace InsightArchitectures.AnonymousUser
             return Task.FromResult(Encoding.UTF8.GetString(bytes));
         }
 
+        /// <summary>
+        /// Serialiases a clear text value into base64.
+        /// <param name="value">A clear text value. Returns null if argument is null</param>
+        /// </summary>
         public Task<string> EncodeAsync(string value)
         {
-            if(string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value))
             {
                 return Task.FromResult((string)null);
             }

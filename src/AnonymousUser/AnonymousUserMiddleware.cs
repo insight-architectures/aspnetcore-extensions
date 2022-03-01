@@ -5,12 +5,19 @@ using Microsoft.AspNetCore.Http;
 
 namespace InsightArchitectures.AnonymousUser
 {
+    /// <summary>
+    /// The anonymous user middleware. It either creates a new or reads an existing cookie
+    /// and maps the value to a claim.
+    /// </summary>
     public class AnonymousUserMiddleware
     {
         private RequestDelegate _nextDelegate;
         private AnonymousUserOptions _options;
 
-        public AnonymousUserMiddleware(RequestDelegate nextDelegate, AnonymousUserOptions options)
+        /// <summary>
+        /// Constructor requires the next delegate and options.
+        /// </summary>
+        internal AnonymousUserMiddleware(RequestDelegate nextDelegate, AnonymousUserOptions options)
         {
             _nextDelegate = nextDelegate ?? throw new ArgumentNullException(nameof(nextDelegate));
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -47,7 +54,7 @@ namespace InsightArchitectures.AnonymousUser
 
                 var cookieOptions = new CookieOptions
                 {
-                    Expires = _options.Expires
+                    Expires = _options.Expires,
                 };
 
                 httpContext.Response.Cookies.Append(_options.CookieName, encodedUid, cookieOptions);
@@ -57,8 +64,12 @@ namespace InsightArchitectures.AnonymousUser
             httpContext.User.AddIdentity(identity);
         }
 
+        /// <summary>
+        /// Called by the pipeline, runs the handler.
+        /// </summary>
         public async Task InvokeAsync(HttpContext httpContext)
         {
+            _ = httpContext ?? throw new ArgumentNullException(nameof(httpContext));
             await HandleRequestAsync(httpContext);
 
             await _nextDelegate.Invoke(httpContext);
