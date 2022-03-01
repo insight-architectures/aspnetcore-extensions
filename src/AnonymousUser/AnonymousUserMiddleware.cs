@@ -17,7 +17,7 @@ namespace InsightArchitectures.AnonymousUser
         /// <summary>
         /// Constructor requires the next delegate and options.
         /// </summary>
-        internal AnonymousUserMiddleware(RequestDelegate nextDelegate, AnonymousUserOptions options)
+        public AnonymousUserMiddleware(RequestDelegate nextDelegate, AnonymousUserOptions options)
         {
             _nextDelegate = nextDelegate ?? throw new ArgumentNullException(nameof(nextDelegate));
             _options = options ?? throw new ArgumentNullException(nameof(options));
