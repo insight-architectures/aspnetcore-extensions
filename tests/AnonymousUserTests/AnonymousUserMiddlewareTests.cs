@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
-using InsightArchitectures.AnonymousUser;
+using InsightArchitectures.Extensions.AspNetCore.AnonymousUser;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Moq;
@@ -12,7 +12,7 @@ namespace AnonymousUserTests
 {
     public class AnonymousUserMiddlewareTests
     {
-        [Test, MoqAutoData]
+        [Test, CustomAutoDataAttribute]
         public async Task NoCookiesShouldCreateCookie(HttpContext context, [Frozen] AnonymousUserOptions options, AnonymousUserMiddleware sut)
         {
             await sut.InvokeAsync(context);
@@ -22,7 +22,7 @@ namespace AnonymousUserTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(actual));
         }
 
-        [Test, MoqAutoData]
+        [Test, CustomAutoDataAttribute]
         public async Task ExistingCookieShouldNotAddCookieToResponse(HttpContext context, [Frozen] Mock<HttpRequest> httpRequest, [Frozen] AnonymousUserOptions options, AnonymousUserMiddleware sut)
         {
             var cookies = new Dictionary<string, string>
@@ -38,7 +38,7 @@ namespace AnonymousUserTests
             Assert.IsTrue(string.IsNullOrWhiteSpace(actual));
         }
 
-        [Test, MoqAutoData]
+        [Test, CustomAutoDataAttribute]
         public async Task SecureCookieWithHttpShouldExpire(HttpContext context, [Frozen] Mock<HttpRequest> httpRequest, [Frozen] AnonymousUserOptions options, AnonymousUserMiddleware sut)
         {
             var cookies = new Dictionary<string, string>
@@ -56,7 +56,7 @@ namespace AnonymousUserTests
             Assert.IsEmpty(actual);
         }
 
-        [Test, MoqAutoData]
+        [Test, CustomAutoDataAttribute]
         public async Task AuthenticatedUserShouldSkipMiddleware(HttpContext context, [Frozen] Mock<ClaimsPrincipal> claimsPrincipal, AnonymousUserMiddleware sut)
         {
             claimsPrincipal.Setup(x => x.Identity).Returns(new ClaimsIdentity(null, "Test"));

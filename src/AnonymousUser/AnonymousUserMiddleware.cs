@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace InsightArchitectures.AnonymousUser
+namespace InsightArchitectures.Extensions.AspNetCore.AnonymousUser
 {
     /// <summary>
     /// The anonymous user middleware. It either creates a new or reads an existing cookie
@@ -48,7 +48,7 @@ namespace InsightArchitectures.AnonymousUser
 
             if (string.IsNullOrWhiteSpace(uid))
             {
-                uid = Guid.NewGuid().ToString();
+                uid = _options.UserIdentifierFactory.Invoke(httpContext);
                 var encodedUid = await cookieEncoder.EncodeAsync(uid);
 
                 var cookieOptions = new CookieOptions

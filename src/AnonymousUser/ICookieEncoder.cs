@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace InsightArchitectures.AnonymousUser
+namespace InsightArchitectures.Extensions.AspNetCore.AnonymousUser
 {
     /// <summary>
     /// Interface for cookie value serialisation.

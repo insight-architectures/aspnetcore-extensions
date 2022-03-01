@@ -1,17 +1,34 @@
-using System.Security.Claims;
+using System;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.NUnit3;
-using InsightArchitectures.AnonymousUser;
+using InsightArchitectures.Extensions.AspNetCore.AnonymousUser;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Moq;
 
 namespace AnonymousUserTests
 {
-    public class MoqAutoDataAttribute : AutoDataAttribute
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class CustomAutoDataAttribute : AutoDataAttribute
     {
-        public MoqAutoDataAttribute() : base(() =>
+        public CustomAutoDataAttribute() : base(FixtureHelpers.CreateFixture)
+        {
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+    public class CustomInlineAutoDataAttribute : InlineAutoDataAttribute
+    {
+        public CustomInlineAutoDataAttribute(params object[] args) : base(FixtureHelpers.CreateFixture, args)
+        {
+        }
+    }
+
+    internal static class FixtureHelpers
+    {
+        public static IFixture CreateFixture()
         {
             var fixture = new Fixture();
 
@@ -37,7 +54,6 @@ namespace AnonymousUserTests
             });
 
             return fixture;
-        })
-        { }
+        }
     }
 }

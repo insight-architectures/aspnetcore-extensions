@@ -1,13 +1,13 @@
 using System;
 using System.Threading.Tasks;
-using InsightArchitectures.AnonymousUser;
+using InsightArchitectures.Extensions.AspNetCore.AnonymousUser;
 using NUnit.Framework;
 
 namespace AnonymousUserTests
 {
     public class Base64CookieEncoderTests
     {
-        [Test, MoqAutoData]
+        [Test, CustomAutoDataAttribute]
         public async Task EncodingAndDecodingShouldReturnInitialValue(Base64CookieEncoder sut, string initialValue)
         {
             var encodedValue = await sut.EncodeAsync(initialValue);
@@ -16,7 +16,7 @@ namespace AnonymousUserTests
             Assert.AreEqual(initialValue, decodedValue);
         }
 
-        [Test, MoqAutoData]
+        [Test, CustomAutoDataAttribute]
         public async Task EncodingShouldReturnBase64String(Base64CookieEncoder sut, string decodedValue)
         {
             var encodedValue = await sut.EncodeAsync(decodedValue);
@@ -30,7 +30,7 @@ namespace AnonymousUserTests
             }
         }
 
-        [Test, MoqAutoData]
+        [Test, CustomAutoDataAttribute]
         public async Task NullInputShouldReturnNull(Base64CookieEncoder sut)
         {
             Assert.IsNull(await sut.EncodeAsync(null));

@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InsightArchitectures.AnonymousUser
+namespace InsightArchitectures.Extensions.AspNetCore.AnonymousUser
 {
     /// <summary>
     /// Default cookie value encoder/decoder. Uses base64 for serialisation.
@@ -11,7 +11,8 @@ namespace InsightArchitectures.AnonymousUser
     {
         /// <summary>
         /// Deserialises a base64 value into clear text.
-        /// <param name="encodedValue">A base64 value. Returns null if argument is null</param>
+        /// <param name="encodedValue">A base64 encoded value.</param>
+        /// <returns>Returns null if argument is null, otherwise the decoded value.</returns>
         /// </summary>
         public Task<string> DecodeAsync(string encodedValue)
         {
@@ -27,7 +28,8 @@ namespace InsightArchitectures.AnonymousUser
 
         /// <summary>
         /// Serialiases a clear text value into base64.
-        /// <param name="value">A clear text value. Returns null if argument is null</param>
+        /// <param name="value">A clear text value.</param>
+        /// <returns>Returns null if argument is null, otherwise the encoded value.</returns>
         /// </summary>
         public Task<string> EncodeAsync(string value)
         {

@@ -1,7 +1,7 @@
 using System;
-using Microsoft.AspNetCore.Builder;
+using InsightArchitectures.Extensions.AspNetCore.AnonymousUser;
 
-namespace InsightArchitectures.AnonymousUser
+namespace Microsoft.AspNetCore.Builder
 {
     /// <summary>
     /// Extension methods for the ASP NET Core application builder.
