@@ -12,7 +12,7 @@ namespace InsightArchitectures.Extensions.AspNetCore.AnonymousUser
         /// <summary>
         /// Deserialises a base64 value into clear text.
         /// <param name="encodedValue">A base64 encoded value.</param>
-        /// <returns>Returns null if argument is null, otherwise the decoded value.</returns>
+        /// <returns>Returns null if <paramref name="encodedValue" /> is null, otherwise the decoded value.</returns>
         /// </summary>
         public Task<string> DecodeAsync(string encodedValue)
         {
@@ -29,7 +29,7 @@ namespace InsightArchitectures.Extensions.AspNetCore.AnonymousUser
         /// <summary>
         /// Serialiases a clear text value into base64.
         /// <param name="value">A clear text value.</param>
-        /// <returns>Returns null if argument is null, otherwise the encoded value.</returns>
+        /// <returns>Returns null if <paramref name="value" /> is null, otherwise the encoded value.</returns>
         /// </summary>
         public Task<string> EncodeAsync(string value)
         {
