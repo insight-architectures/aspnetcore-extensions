@@ -19,7 +19,7 @@ namespace InsightArchitectures.AnonymousUser
 
             configure?.Invoke(options);
 
-            _ = options.ClaimType ?? throw new ArgumentNullException(nameof(options.ClaimType));
+            _ = options.ClaimType ?? throw new NullReferenceException($"{nameof(options.ClaimType)} is null. Please provide a claim type name when configuring the middleware.");
 
             return builder.UseMiddleware<AnonymousUserMiddleware>(options);
         }
