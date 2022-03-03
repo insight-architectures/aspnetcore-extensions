@@ -25,8 +25,8 @@ namespace InsightArchitectures.Extensions.AspNetCore.AnonymousUser
 
         private async Task HandleRequestAsync(HttpContext httpContext)
         {
-            var cookieEncoder = _options.EncoderService ?? throw new ArgumentNullException($"{nameof(_options.EncoderService)} is null and should have a valid encoder.");
-            _ = _options.UserIdentifierFactory ?? throw new ArgumentNullException($"{nameof(_options.UserIdentifierFactory)} is null and should have a valid factory.");
+            var cookieEncoder = _options.EncoderService ?? throw new ArgumentNullException(nameof(_options.EncoderService), $"{nameof(_options.EncoderService)} is null and should have a valid encoder.");
+            _ = _options.UserIdentifierFactory ?? throw new ArgumentNullException(nameof(_options.UserIdentifierFactory), $"{nameof(_options.UserIdentifierFactory)} is null and should have a valid factory.");
 
             if (httpContext.User.Identity?.IsAuthenticated == true)
             {
