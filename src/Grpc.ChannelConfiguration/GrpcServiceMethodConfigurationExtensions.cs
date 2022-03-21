@@ -79,6 +79,8 @@ public static class GrpcServiceMethodConfigurationExtensions
 
         _ = methodName ?? throw new ArgumentNullException(nameof(methodName));
 
+        _ = retryPolicy ?? throw new ArgumentNullException(nameof(retryPolicy));
+
         var methodConfig = new MethodConfig
         {
             Names = { methodName },
@@ -106,6 +108,8 @@ public static class GrpcServiceMethodConfigurationExtensions
         _ = builder ?? throw new ArgumentNullException(nameof(builder));
 
         _ = methodName ?? throw new ArgumentNullException(nameof(methodName));
+
+        _ = hedgingPolicy ?? throw new ArgumentNullException(nameof(hedgingPolicy));
 
         var methodConfig = new MethodConfig
         {
@@ -161,6 +165,8 @@ public static class GrpcServiceMethodConfigurationExtensions
 
         _ = methodName ?? throw new ArgumentNullException(nameof(methodName));
 
+        _ = retryPolicy ?? throw new ArgumentNullException(nameof(retryPolicy));
+
         return ConfigureServiceMethod(builder, ParseKey(methodName), retryPolicy);
     }
 
@@ -182,6 +188,8 @@ public static class GrpcServiceMethodConfigurationExtensions
         _ = builder ?? throw new ArgumentNullException(nameof(builder));
 
         _ = methodName ?? throw new ArgumentNullException(nameof(methodName));
+
+        _ = hedgingPolicy ?? throw new ArgumentNullException(nameof(hedgingPolicy));
 
         return ConfigureServiceMethod(builder, ParseKey(methodName), hedgingPolicy);
     }
@@ -210,6 +218,8 @@ public static class GrpcServiceMethodConfigurationExtensions
     {
         _ = builder ?? throw new ArgumentNullException(nameof(builder));
 
+        _ = retryPolicy ?? throw new ArgumentNullException(nameof(retryPolicy));
+
         return ConfigureServiceMethod(builder, MethodName.Default, retryPolicy);
     }
 
@@ -222,6 +232,8 @@ public static class GrpcServiceMethodConfigurationExtensions
     public static IHttpClientBuilder ConfigureDefaultServiceMethod(this IHttpClientBuilder builder, HedgingPolicy hedgingPolicy)
     {
         _ = builder ?? throw new ArgumentNullException(nameof(builder));
+
+        _ = hedgingPolicy ?? throw new ArgumentNullException(nameof(hedgingPolicy));
 
         return ConfigureServiceMethod(builder, MethodName.Default, hedgingPolicy);
     }
