@@ -257,14 +257,14 @@ public static class GrpcServiceMethodConfigurationExtensions
 
         const string Separator = "/";
 
-        var separatorIndex = key.IndexOf(Separator, 0, StringComparison.Ordinal);
+        var parts = key.Split(Separator, StringSplitOptions.RemoveEmptyEntries);
 
-        if (separatorIndex > -1)
+        if (parts.Length > 1)
         {
             return new MethodName
             {
-                Service = key[0..separatorIndex],
-                Method = key[(separatorIndex + Separator.Length)..],
+                Service = parts[0],
+                Method = parts[1],
             };
         }
         else if (key.Equals(FallbackConfigurationKeyName, StringComparison.OrdinalIgnoreCase))
