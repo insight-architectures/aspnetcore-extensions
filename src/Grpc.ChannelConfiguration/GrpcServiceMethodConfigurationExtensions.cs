@@ -26,7 +26,8 @@ public static class GrpcServiceMethodConfigurationExtensions
 
         _ = section ?? throw new ArgumentNullException(nameof(section));
 
-        foreach (var item in section?.GetChildren() ?? Array.Empty<IConfigurationSection>())
+        var children = section?.GetChildren() ?? Array.Empty<IConfigurationSection>();
+        foreach (var item in children)
         {
             var methodName = ParseKey(item.Key);
 
