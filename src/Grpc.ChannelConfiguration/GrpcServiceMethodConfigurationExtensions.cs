@@ -9,6 +9,11 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class GrpcServiceMethodConfigurationExtensions
 {
     /// <summary>
+    /// The name of the configuration key to be used for the fallback setup.
+    /// </summary>
+    public const string FallbackConfigurationKeyName = "Default";
+
+    /// <summary>
     /// Customizes the <see cref="IHttpClientBuilder" /> to configure all service methods according to the values in <paramref name="section"/>.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientBuilder" /> to configure.</param>
@@ -50,9 +55,9 @@ public static class GrpcServiceMethodConfigurationExtensions
 
         _ = section ?? throw new ArgumentNullException(nameof(section));
 
-        var retryPolicy = LoadPolicy<RetryPolicy>(section);
+        var retryPolicy = LoadPolicy<RetryPolicy>(section, nameof(RetryPolicy));
 
-        var hedgingPolicy = LoadPolicy<HedgingPolicy>(section);
+        var hedgingPolicy = LoadPolicy<HedgingPolicy>(section, nameof(HedgingPolicy));
 
         return (retryPolicy, hedgingPolicy) switch
         {
@@ -238,7 +243,7 @@ public static class GrpcServiceMethodConfigurationExtensions
         return ConfigureServiceMethod(builder, MethodName.Default, hedgingPolicy);
     }
 
-    private static T LoadPolicy<T>(IConfigurationSection section, string sectionName = nameof(T))
+    private static T LoadPolicy<T>(IConfigurationSection section, string sectionName)
     {
         _ = section ?? throw new ArgumentNullException(nameof(section));
 
@@ -261,7 +266,7 @@ public static class GrpcServiceMethodConfigurationExtensions
                 Method = key[(separatorIndex + Separator.Length)..],
             };
         }
-        else if (key.Equals("default", StringComparison.OrdinalIgnoreCase))
+        else if (key.Equals(FallbackConfigurationKeyName, StringComparison.OrdinalIgnoreCase))
         {
             return MethodName.Default;
         }

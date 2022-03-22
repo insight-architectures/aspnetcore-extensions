@@ -2,6 +2,7 @@ using System;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.NUnit3;
+using Grpc.Net.Client.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -40,6 +41,8 @@ namespace Tests
             fixture.Register<ConfigurationBuilder>(() => new ConfigurationBuilder());
 
             fixture.Customize<TimeSpan>(o => o.FromFactory<int>(i => TimeSpan.FromMilliseconds(i)));
+
+            fixture.Customize<RetryPolicy>(o => o.With(p => p.BackoffMultiplier).With(p => p.InitialBackoff).With(p => p.MaxAttempts).With(p => p.MaxBackoff));
 
             return fixture;
         }
