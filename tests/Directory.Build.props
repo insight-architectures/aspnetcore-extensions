@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <RootNamespace>Tests</RootNamespace>
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -8,8 +9,8 @@
     <PackageReference Include="AutoFixture.AutoMoq" Version="4.17.0" />
     <PackageReference Include="AutoFixture.Idioms" Version="4.17.0" />
     <PackageReference Include="AutoFixture.NUnit3" Version="4.17.0" />
-    <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="NunitXml.TestLogger" Version="3.0.107" />
+    <PackageReference Include="Moq" Version="4.17.2" />
+    <PackageReference Include="NunitXml.TestLogger" Version="3.0.117" />
   </ItemGroup>
 
 </Project>

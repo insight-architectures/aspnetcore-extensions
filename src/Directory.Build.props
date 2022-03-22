@@ -2,7 +2,7 @@
   <PropertyGroup>
     <RootNamespace>InsightArchitectures.Extensions.AspNetCore</RootNamespace>
     <AssemblyName>$(RootNamespace).$(MSBuildProjectName)</AssemblyName>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
