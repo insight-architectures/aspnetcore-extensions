@@ -63,8 +63,8 @@ public static class GrpcServiceMethodConfigurationExtensions
         return (retryPolicy, hedgingPolicy) switch
         {
             (null, null) => builder,
-            (var policy, null) => ConfigureServiceMethod(builder, methodName, policy),
-            (null, var policy) => ConfigureServiceMethod(builder, methodName, policy),
+            (var policy, null) => SetServiceMethodRetryPolicy(builder, methodName, policy),
+            (null, var policy) => SetServiceMethodHedgingPolicy(builder, methodName, policy),
             (_, _) => throw new ArgumentException("A retry policy can't be combined with a hedging policy."),
         };
     }
@@ -79,7 +79,7 @@ public static class GrpcServiceMethodConfigurationExtensions
     /// </param>
     /// <param name="retryPolicy">The <see cref="RetryPolicy" /> to attach to all service method matching the pattern specified in <paramref name="methodName"/>.</param>
     /// <returns>The configured <see cref="IHttpClientBuilder" />.</returns>
-    public static IHttpClientBuilder ConfigureServiceMethod(this IHttpClientBuilder builder, MethodName methodName, RetryPolicy retryPolicy)
+    public static IHttpClientBuilder SetServiceMethodRetryPolicy(this IHttpClientBuilder builder, MethodName methodName, RetryPolicy retryPolicy)
     {
         _ = builder ?? throw new ArgumentNullException(nameof(builder));
 
@@ -109,7 +109,7 @@ public static class GrpcServiceMethodConfigurationExtensions
     /// </param>
     /// <param name="hedgingPolicy">The <see cref="HedgingPolicy" /> to attach to all service method matching the pattern specified in <paramref name="methodName"/>.</param>
     /// <returns>The configured <see cref="IHttpClientBuilder" />.</returns>
-    public static IHttpClientBuilder ConfigureServiceMethod(this IHttpClientBuilder builder, MethodName methodName, HedgingPolicy hedgingPolicy)
+    public static IHttpClientBuilder SetServiceMethodHedgingPolicy(this IHttpClientBuilder builder, MethodName methodName, HedgingPolicy hedgingPolicy)
     {
         _ = builder ?? throw new ArgumentNullException(nameof(builder));
 
@@ -165,7 +165,7 @@ public static class GrpcServiceMethodConfigurationExtensions
     /// </param>
     /// <param name="retryPolicy">The <see cref="RetryPolicy" /> to attach to all service method matching the pattern specified in <paramref name="methodName"/>.</param>
     /// <returns>The configured <see cref="IHttpClientBuilder" />.</returns>
-    public static IHttpClientBuilder ConfigureServiceMethod(this IHttpClientBuilder builder, string methodName, RetryPolicy retryPolicy)
+    public static IHttpClientBuilder SetServiceMethodRetryPolicy(this IHttpClientBuilder builder, string methodName, RetryPolicy retryPolicy)
     {
         _ = builder ?? throw new ArgumentNullException(nameof(builder));
 
@@ -173,7 +173,7 @@ public static class GrpcServiceMethodConfigurationExtensions
 
         _ = retryPolicy ?? throw new ArgumentNullException(nameof(retryPolicy));
 
-        return ConfigureServiceMethod(builder, ParseKey(methodName), retryPolicy);
+        return SetServiceMethodRetryPolicy(builder, ParseKey(methodName), retryPolicy);
     }
 
     /// <summary>
@@ -189,7 +189,7 @@ public static class GrpcServiceMethodConfigurationExtensions
     /// </param>
     /// <param name="hedgingPolicy">The <see cref="HedgingPolicy" /> to attach to all service method matching the pattern specified in <paramref name="methodName"/>.</param>
     /// <returns>The configured <see cref="IHttpClientBuilder" />.</returns>
-    public static IHttpClientBuilder ConfigureServiceMethod(this IHttpClientBuilder builder, string methodName, HedgingPolicy hedgingPolicy)
+    public static IHttpClientBuilder SetServiceMethodHedgingPolicy(this IHttpClientBuilder builder, string methodName, HedgingPolicy hedgingPolicy)
     {
         _ = builder ?? throw new ArgumentNullException(nameof(builder));
 
@@ -197,7 +197,7 @@ public static class GrpcServiceMethodConfigurationExtensions
 
         _ = hedgingPolicy ?? throw new ArgumentNullException(nameof(hedgingPolicy));
 
-        return ConfigureServiceMethod(builder, ParseKey(methodName), hedgingPolicy);
+        return SetServiceMethodHedgingPolicy(builder, ParseKey(methodName), hedgingPolicy);
     }
 
     /// <summary>
@@ -207,7 +207,7 @@ public static class GrpcServiceMethodConfigurationExtensions
     /// <param name="section">The instance of <see cref="IConfigurationSection" /> containing the configuration to attach to all methods.</param>
     /// <returns>The configured <see cref="IHttpClientBuilder" />.</returns>
     /// <exception cref="ArgumentException">Thrown when the method is configured with both a <see cref="RetryPolicy" /> and a <see creft="HedgingPolicy" />.</exception>
-    public static IHttpClientBuilder ConfigureDefaultServiceMethod(this IHttpClientBuilder builder, IConfigurationSection section)
+    public static IHttpClientBuilder ConfigureServiceMethodFallback(this IHttpClientBuilder builder, IConfigurationSection section)
     {
         _ = builder ?? throw new ArgumentNullException(nameof(builder));
 
@@ -220,13 +220,13 @@ public static class GrpcServiceMethodConfigurationExtensions
     /// <param name="builder">The <see cref="IHttpClientBuilder" /> to configure.</param>
     /// <param name="retryPolicy">The <see cref="RetryPolicy" /> to attach to all service methods.</param>
     /// <returns>The configured <see cref="IHttpClientBuilder" />.</returns>
-    public static IHttpClientBuilder ConfigureDefaultServiceMethod(this IHttpClientBuilder builder, RetryPolicy retryPolicy)
+    public static IHttpClientBuilder SetFallbackRetryPolicy(this IHttpClientBuilder builder, RetryPolicy retryPolicy)
     {
         _ = builder ?? throw new ArgumentNullException(nameof(builder));
 
         _ = retryPolicy ?? throw new ArgumentNullException(nameof(retryPolicy));
 
-        return ConfigureServiceMethod(builder, MethodName.Default, retryPolicy);
+        return SetServiceMethodRetryPolicy(builder, MethodName.Default, retryPolicy);
     }
 
     /// <summary>
@@ -235,13 +235,13 @@ public static class GrpcServiceMethodConfigurationExtensions
     /// <param name="builder">The <see cref="IHttpClientBuilder" /> to configure.</param>
     /// <param name="hedgingPolicy">The <see cref="HedgingPolicy" /> to attach to all service methods.</param>
     /// <returns>The configured <see cref="IHttpClientBuilder" />.</returns>
-    public static IHttpClientBuilder ConfigureDefaultServiceMethod(this IHttpClientBuilder builder, HedgingPolicy hedgingPolicy)
+    public static IHttpClientBuilder SetFallbackHedgingPolicy(this IHttpClientBuilder builder, HedgingPolicy hedgingPolicy)
     {
         _ = builder ?? throw new ArgumentNullException(nameof(builder));
 
         _ = hedgingPolicy ?? throw new ArgumentNullException(nameof(hedgingPolicy));
 
-        return ConfigureServiceMethod(builder, MethodName.Default, hedgingPolicy);
+        return SetServiceMethodHedgingPolicy(builder, MethodName.Default, hedgingPolicy);
     }
 
     private static T LoadPolicy<T>(IConfigurationSection section, string sectionName)
