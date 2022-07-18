@@ -20,6 +20,9 @@ namespace InsightArchitectures.Extensions.AspNetCore.AnonymousUser
         /// <summary>Should the cookie only be allowed on https requests.</summary>
         public bool Secure { get; set; }
 
+        /// <summary>Should the anonymous session id be skipped when an user is authenticated.</summary>
+        public bool SkipAuthenticated { get; set; }
+
         /// <summary>Can be overridden to customise the ID generation.</summary>
         public Func<HttpContext, string> UserIdentifierFactory { get; set; } = _ => Guid.NewGuid().ToString();
 
