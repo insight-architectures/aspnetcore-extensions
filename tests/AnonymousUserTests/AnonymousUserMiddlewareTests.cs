@@ -12,7 +12,7 @@ namespace AnonymousUserTests
 {
     public class AnonymousUserMiddlewareTests
     {
-        [Test, CustomAutoDataAttribute]
+        [Test, CustomAutoData]
         public async Task NoCookiesShouldCreateCookie(HttpContext context, [Frozen] AnonymousUserOptions options, AnonymousUserMiddleware sut)
         {
             await sut.InvokeAsync(context);
@@ -22,7 +22,7 @@ namespace AnonymousUserTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(actual));
         }
 
-        [Test, CustomAutoDataAttribute]
+        [Test, CustomAutoData]
         public async Task ExistingCookieShouldNotAddCookieToResponse(HttpContext context, [Frozen] Mock<HttpRequest> httpRequest, [Frozen] AnonymousUserOptions options, AnonymousUserMiddleware sut)
         {
             var cookies = new Dictionary<string, string>
@@ -38,7 +38,7 @@ namespace AnonymousUserTests
             Assert.IsTrue(string.IsNullOrWhiteSpace(actual));
         }
 
-        [Test, CustomAutoDataAttribute]
+        [Test, CustomAutoData]
         public async Task SecureCookieWithHttpShouldExpire(HttpContext context, [Frozen] Mock<HttpRequest> httpRequest, [Frozen] AnonymousUserOptions options, AnonymousUserMiddleware sut)
         {
             var cookies = new Dictionary<string, string>
@@ -56,15 +56,22 @@ namespace AnonymousUserTests
             Assert.IsEmpty(actual);
         }
 
-        [Test, CustomAutoDataAttribute]
+        [Test, CustomAutoData]
         public async Task AuthenticatedUserShouldSkipMiddleware(HttpContext context, [Frozen] Mock<ClaimsPrincipal> claimsPrincipal, AnonymousUserMiddleware sut)
         {
-            claimsPrincipal.Setup(x => x.Identity).Returns(new ClaimsIdentity(null, "Test"));
+            var identityMock = new Mock<ClaimsIdentity>(() => new ClaimsIdentity(null, "Test"));
+            claimsPrincipal.Setup(x => x.Identity).Returns(identityMock.Object);
+            identityMock.Setup(x => x.IsAuthenticated).Returns(true);
+            
             claimsPrincipal.Setup(x => x.AddIdentity(It.IsAny<ClaimsIdentity>())).Verifiable();
+            identityMock.Setup(x => x.AddClaim(It.IsAny<Claim>())).Verifiable();
+
+            context.User = claimsPrincipal.Object;
 
             await sut.InvokeAsync(context);
 
             claimsPrincipal.Verify(x => x.AddIdentity(It.IsAny<ClaimsIdentity>()), Times.Never);
+            identityMock.Verify(x => x.AddClaim(It.IsAny<Claim>()), Times.Never);
         }
 
         private string? GetCookieValueFromResponse(HttpResponse response, string cookieName)

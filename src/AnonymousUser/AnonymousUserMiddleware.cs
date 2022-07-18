@@ -11,8 +11,8 @@ namespace InsightArchitectures.Extensions.AspNetCore.AnonymousUser
     /// </summary>
     public class AnonymousUserMiddleware
     {
-        private RequestDelegate _nextDelegate;
-        private AnonymousUserOptions _options;
+        private readonly RequestDelegate _nextDelegate;
+        private readonly AnonymousUserOptions _options;
 
         /// <summary>
         /// Constructor requires the next delegate and options.
@@ -25,10 +25,14 @@ namespace InsightArchitectures.Extensions.AspNetCore.AnonymousUser
 
         private async Task HandleRequestAsync(HttpContext httpContext)
         {
-            var cookieEncoder = _options.EncoderService ?? throw new ArgumentNullException(nameof(_options.EncoderService), $"{nameof(_options.EncoderService)} is null and should have a valid encoder.");
-            _ = _options.UserIdentifierFactory ?? throw new ArgumentNullException(nameof(_options.UserIdentifierFactory), $"{nameof(_options.UserIdentifierFactory)} is null and should have a valid factory.");
+            var cookieEncoder = _options.EncoderService ?? throw new ArgumentNullException(
+                nameof(_options.EncoderService),
+                $"{nameof(_options.EncoderService)} is null and should have a valid encoder.");
+            _ = _options.UserIdentifierFactory ?? throw new ArgumentNullException(
+                nameof(_options.UserIdentifierFactory),
+                $"{nameof(_options.UserIdentifierFactory)} is null and should have a valid factory.");
 
-            if (httpContext.User.Identity?.IsAuthenticated == true)
+            if (_options.SkipAuthenticated && httpContext.User.Identity?.IsAuthenticated == true)
             {
                 return;
             }
@@ -52,16 +56,22 @@ namespace InsightArchitectures.Extensions.AspNetCore.AnonymousUser
                 uid = _options.UserIdentifierFactory.Invoke(httpContext);
                 var encodedUid = await cookieEncoder.EncodeAsync(uid);
 
-                var cookieOptions = new CookieOptions
-                {
-                    Expires = _options.Expires,
-                };
+                var cookieOptions = new CookieOptions { Expires = _options.Expires };
 
                 httpContext.Response.Cookies.Append(_options.CookieName, encodedUid, cookieOptions);
             }
 
-            var identity = new ClaimsIdentity(new[] { new Claim(_options.ClaimType, uid) });
-            httpContext.User.AddIdentity(identity);
+            var claim = new Claim(_options.ClaimType, uid);
+
+            if (httpContext.User.Identity is ClaimsIdentity ci)
+            {
+                ci.AddClaim(claim);
+            }
+            else
+            {
+                var identity = new ClaimsIdentity(new[] { claim });
+                httpContext.User.AddIdentity(identity);
+            }
         }
 
         /// <summary>
