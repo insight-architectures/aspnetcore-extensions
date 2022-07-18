@@ -56,7 +56,7 @@ namespace InsightArchitectures.Extensions.AspNetCore.AnonymousUser
                 uid = _options.UserIdentifierFactory.Invoke(httpContext);
                 var encodedUid = await cookieEncoder.EncodeAsync(uid);
 
-                var cookieOptions = new CookieOptions {Expires = _options.Expires,};
+                var cookieOptions = new CookieOptions { Expires = _options.Expires };
 
                 httpContext.Response.Cookies.Append(_options.CookieName, encodedUid, cookieOptions);
             }
